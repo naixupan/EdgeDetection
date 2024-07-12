@@ -1,0 +1,46 @@
+# 开发日期：2024年7月12日
+# 文件名称：EdgeDetection.py
+# 功能描述：对花篮图片进行边缘检测，获取各区域的面积，并统计数量。其他需求后续处理
+# 开发人员：何广鹏
+
+import cv2
+import numpy as np
+
+
+# 读取图片；将图像转化为灰度图
+
+image_dir='F:/images/result/result_pic/cuopian/20240524_025123220_0.BMP'
+image = cv2.imread(image_dir,cv2.IMREAD_GRAYSCALE)   # 使用OpenCV读取图像，并以灰度模式加载图像
+# cv2.imshow("image", image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+print(image)
+
+# 裁剪
+
+cropped_image=image[577:860, 923:10712]
+
+# cv2.imshow("corpped_image", cropped_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# 图像二值化
+
+ret,binatied_image=cv2.threshold(cropped_image, 80, 180, cv2.THRESH_BINARY);
+
+# cv2.imshow("binatied_image", binatied_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+# 平滑滤波
+
+
+# 边缘检测/斑点检测
+
+detector = cv2.SimpleBlobDetector()
+
+keypoints = detector.detect(binatied_image)
+
+
+
