@@ -5,6 +5,7 @@
 
 import cv2
 import numpy as np
+import matplotlib
 
 
 # 读取图片；将图像转化为灰度图
@@ -34,13 +35,26 @@ ret,binatied_image=cv2.threshold(cropped_image, 80, 180, cv2.THRESH_BINARY);
 # cv2.destroyAllWindows()
 
 # 平滑滤波
+blur_image = cv2.GaussianBlur(binatied_image,(3,3),0)
+
+cv2.imshow("blur_image", blur_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
 
 
 # 边缘检测/斑点检测
 
-detector = cv2.SimpleBlobDetector()
+edge_image = cv2.Canny(blur_image,100,200)
 
-keypoints = detector.detect(binatied_image)
+cv2.imshow("edge_image", edge_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
+# 查找轮廓
+contours, _ = cv2.findContours(edge_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+# 统计轮廓数量即图形数量
+count = len(contours)
 
+print(count)
