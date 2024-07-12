@@ -58,3 +58,19 @@ contours, _ = cv2.findContours(edge_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_S
 count = len(contours)
 
 print(count)
+
+for contour in contours:
+    area = cv2.contourArea(contour)
+    print("area:",area)
+
+
+# 读取二值图像
+# binary_image = cv2.imread('binary_image.jpg', cv2.IMREAD_GRAYSCALE)
+
+# 标记连通区域
+num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binatied_image)
+
+# 统计图形数量
+count = num_labels - 1  # 减去背景
+
+print(count)
