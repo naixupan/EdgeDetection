@@ -10,17 +10,17 @@ import matplotlib
 
 # 读取图片；将图像转化为灰度图
 
-image_dir='F:/images/result/result_pic/cuopian/20240524_025123220_0.BMP'
+image_dir='F:/images/result/result_pic/cuopian/20240524_071125709_0.BMP'
 image = cv2.imread(image_dir,cv2.IMREAD_GRAYSCALE)   # 使用OpenCV读取图像，并以灰度模式加载图像
-# cv2.imshow("image", image)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+cv2.imshow("image", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 print(image)
 
 # 裁剪
 
-cropped_image=image[577:860, 923:10712]
+cropped_image=image[561:869, 939:10719]
 
 # cv2.imshow("corpped_image", cropped_image)
 # cv2.waitKey(0)
