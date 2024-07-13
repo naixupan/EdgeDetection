@@ -15,9 +15,9 @@ def display_images(images, titles):
 
     num_images = len(images)
     num_rows = int(num_images / 2) + num_images % 2
-    num_clos = 2
+    num_cols = 2
 
-    fig, axes = plt.subplots(num_rows, num_clos, figsize=(10, 10))
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 10))
 
     # 检查axes是否为二维数组
     if num_images == 1:
@@ -26,8 +26,8 @@ def display_images(images, titles):
         axes = np.array([[axes]])
 
     for i in range(num_images):
-        row = i // num_clos
-        col = i % num_clos
+        row = i // num_cols
+        col = i % num_cols
 
         axes[row, col].imshow(images[i])
         axes[row, col].set_title(titles[i])
