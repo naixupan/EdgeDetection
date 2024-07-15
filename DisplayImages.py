@@ -1,5 +1,5 @@
 # 开发日期：2024年7月13日
-# 文件名称：DisplayImages
+# 文件名称：DisplayImages.py
 # 功能描述：使用matplotlib在一个窗口中展示多个图像
 # 开发人员：何广鹏
 
