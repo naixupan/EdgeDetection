@@ -2,18 +2,20 @@
 # 文件名称：CropImage.py
 # 功能描述：使用模板匹配确定目标区域并裁剪图片
 # 开发人员：何广鹏
+# 更新日期：2024年7月16日
+# 更新内容：为cropimage函数添加返回值，便于调用
 
 import cv2
 import matplotlib.pyplot as plt
 
-def crop_image_using_template_matching(image_path, template_path):
-    # 读取原始图像和模板图像
-    image = cv2.imread(image_path)
-    template = cv2.imread(template_path)
-
-    # 将彩色图像转换为灰度图像。（请注意，如果不转换位灰度图像的话，可能会报错）
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+def cropimage(image, template):
+    # # 读取原始图像和模板图像
+    # image = cv2.imread(image_path)
+    # template = cv2.imread(template_path)
+    #
+    # # 将彩色图像转换为灰度图像。（请注意，如果不转换位灰度图像的话，可能会报错）
+    # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
     # 进行模板匹配
     result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
@@ -37,8 +39,10 @@ def crop_image_using_template_matching(image_path, template_path):
     plt.imshow(cropped_image, cmap='gray')
     plt.show()
 
-# 替换为您的图像和模板的路径
-image_path = 'F:/images/result/result_pic/cuopian/20240524_071125709_0.BMP'
-template_path = './ModelImages/CropImage.bmp'
+    return cropped_image
 
-crop_image_using_template_matching(image_path, template_path)
+
+# image_path = 'F:/images/result/result_pic/cuopian/20240524_071125709_0.BMP'
+# template_path = './ModelImages/CropImage.bmp'
+#
+# cropimage(image_path, template_path)
