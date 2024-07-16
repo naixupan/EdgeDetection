@@ -2,7 +2,8 @@
 # 文件名称：GetLocation.py
 # 功能描述：对于检测到的缺陷，计算并显示缺陷的位置.
 # 开发人员：何广鹏
-
+# 更新日期：2024年7月16日
+# 更新内容：修改了小缺陷判断依据。以小缺陷集合最多的几个作为参考
 
 
 import cv2
@@ -20,7 +21,7 @@ def get_clustered_region(contours, threshold_area, threshold_distance):
         area = cv2.contourArea(cnt)
         if area < threshold_area:
             M = cv2.moments(cnt)
-            if M['m00']!= 0:  # 添加条件判断
+            if M['m00'] != 0:  # 添加条件判断
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
                 small_contour_coords.append((cx, cy))
@@ -45,9 +46,10 @@ def get_clustered_region(contours, threshold_area, threshold_distance):
 
     return clustered_regions
 
+
 # 读取待检测图像和模板图片
-image_path = 'F:/images/result/result_pic/cuopian/20240708_070338275_0.BMP'
-template_path = './ModelImages/CropImage.bmp'
+image_path = 'F:/images/result/result_pic/suipian/20240707_084751958_0.BMP'
+template_path = './ModelImages/Model_Image_All.bmp'
 
 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)  # 读取图片并转化为灰度图
 template = cv2.imread(template_path, cv2.IMREAD_GRAYSCALE)
@@ -75,14 +77,14 @@ ret, binatied_image = cv2.threshold(cropped_image, 80, 180, cv2.THRESH_BINARY)
 
 # 腐蚀操作
 erode_image = cv2.erode(binatied_image, (5, 5))
-open_image=cv2.morphologyEx(binatied_image,cv2.MORPH_OPEN,(5,5))
-
+open_image = cv2.morphologyEx(binatied_image, cv2.MORPH_OPEN, (5, 5))
+dilate_mask = cv2.dilate(binatied_image, kernel=(5, 5))
 
 # 平滑滤波
-blur_image = cv2.GaussianBlur(erode_image, (3, 3), 0)
+blur_image = cv2.GaussianBlur(dilate_mask, (3, 3), 0)
 
 edges = cv2.Canny(blur_image, 50, 150)
-contours, _ = cv2.findContours(edges,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 num_blobs = len(contours)
 
@@ -101,19 +103,16 @@ for contour in contours:
         count += 1
         ok_contour.append(contour)
         x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(drewed_image, (x, y), (x + w, y + h), (0,0,255), 2)
-
-
+        cv2.rectangle(drewed_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
 print(f"检测到的斑点: {num_blobs}")
 print(f"面积正常的斑点:{len(ok_contour)}")
 
-images = [image, cropped_image, binatied_image, erode_image,blur_image, edges, drewed_image]
-titles = ["Original_image", "cropped_image", "binatied_image", "erode_image","blur_image", "edges", "drewed_image"]
+images = [image, cropped_image, binatied_image, erode_image, blur_image, edges, drewed_image]
+titles = ["Original_image", "cropped_image", "binatied_image", "erode_image", "blur_image", "edges", "drewed_image"]
 display_images(images, titles)
 plt.imshow(drewed_image)
 plt.show()
-
 
 # 设定小面积阈值和距离阈值
 threshold_area = 100
@@ -121,14 +120,17 @@ threshold_distance = 200  # 可根据实际情况调整
 
 clustered_regions = get_clustered_region(ng_contour, threshold_area, threshold_distance)
 
-center_location=[]
+center_location = []
+count = 0
 print(clustered_regions)
-for location in clustered_regions:
-    if len(location)>1:
-        coords_array = np.array(location)
-
-        # 计算 x 坐标和 y 坐标的平均值，即为中心点坐标
-        center_x = np.mean(coords_array[:, 0])
-        center_y = np.mean(coords_array[:, 1])
-        center_location.append((center_x,center_y))
+new_clustered_regions = sorted(clustered_regions, key=lambda x: len(x), reverse=True)
+for location in new_clustered_regions:
+    if count > 2:
+        break
+    count += 1
+    coords_array = np.array(location)
+    # 计算 x 坐标和 y 坐标的平均值，即为中心点坐标
+    center_x = np.mean(coords_array[:, 0])
+    center_y = np.mean(coords_array[:, 1])
+    center_location.append((center_x, center_y))
 print(f"center_location:{center_location}")
