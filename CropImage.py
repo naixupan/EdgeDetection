@@ -2,13 +2,17 @@
 # 文件名称：CropImage.py
 # 功能描述：使用模板匹配确定目标区域并裁剪图片
 # 开发人员：何广鹏
+
 # 更新日期：2024年7月16日
 # 更新内容：为cropimage函数添加返回值，便于调用
+# 更新日期：2024年7月17日
+# 更新内容：添加一个用于控制是否显示图像的参数
 
 import cv2
 import matplotlib.pyplot as plt
 
-def cropimage(image, template):
+
+def cropimage(image, template, show=False):
     # # 读取原始图像和模板图像
     # image = cv2.imread(image_path)
     # template = cv2.imread(template_path)
@@ -36,11 +40,11 @@ def cropimage(image, template):
 
     # 显示裁剪后的图像
     # 使用 matplotlib 显示图像
-    plt.imshow(cropped_image, cmap='gray')
-    plt.show()
+    if show==True:
+        plt.imshow(cropped_image, cmap='gray')
+        plt.show()
 
     return cropped_image
-
 
 # image_path = 'F:/images/result/result_pic/cuopian/20240524_071125709_0.BMP'
 # template_path = './ModelImages/CropImage.bmp'
