@@ -14,6 +14,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
 from DisplayImages import display_images
 from CropImage import cropimage
@@ -78,6 +79,10 @@ print(f"Number of detected blobs: {ok_count}")
 # display_images(images, titles)
 plt.imshow(drewed_image,cmap="gray")
 plt.show()
+save=1
+if save == 1:
+    time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+    cv2.imwrite(f"ResultImage/EdgeDetection-{time}.jpg", drewed_image)
 
 #
 
